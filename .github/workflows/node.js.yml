@@ -18,7 +18,9 @@ steps:
     with:
       name: webpack artifacts
       path: public/
-  test:runs-on: ubuntu-latest
+  test:
+  needs: build
+  runs-on: ubuntu-latest
 
 strategy:
   matrix:
@@ -27,6 +29,10 @@ strategy:
 
 steps:
 - uses: actions/checkout@v2
+- uses: actions/download-artifact@master
+  with: 
+    name: webpack artifacts
+    path: public
 - name: Use Node.js ${{ matrix.node-version }}
   uses: actions/setup-node@v1
   with:
@@ -37,3 +43,4 @@ steps:
     npm test
   env:
     CI: true
+
